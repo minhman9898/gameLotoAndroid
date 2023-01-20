@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "210766217606",
+    "project_id": "loto2023",
+    "storage_bucket": "loto2023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210766217606:android:9239a6f8ee49a8fa77ac07",
+        "android_client_info": {
+          "package_name": "com.example.loto2023"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210766217606-h3s9eo96dlop92ntet4mukl454oqfsdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7KUG7n7F5tTooJRK0sWJIWMiZDYfTngI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210766217606-h3s9eo96dlop92ntet4mukl454oqfsdd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
