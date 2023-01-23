@@ -2,6 +2,8 @@ package com.example.loto2023;
 
 import static com.example.loto2023.General.check;
 import static com.example.loto2023.General.getAllNumberOfArray;
+import static com.example.loto2023.General.loadJSONFromAsset;
+import static com.example.loto2023.General.randomLinkAudio;
 
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
@@ -13,60 +15,37 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 public class Round60Activity extends AppCompatActivity {
 
     private Button btnStart, btnClear;
 
-    static String audioURL;
-    String textAudio;
     @SuppressLint("StaticFieldLeak")
-    static TextView txtRandomNumber, txtListNumber0to9, txtListNumber10to19, txtListNumber20to29,
-            txtListNumber30to39, txtListNumber40to49, txtListNumber50to59, txtListNumber60;
+    static TextView txtRandomNumber, txtListNumber0to9, txtListNumber10to19, txtListNumber20to29, txtListNumber30to39, txtListNumber40to49, txtListNumber50to59, txtListNumber60;
     private int count;
 
-    static ArrayList<Integer> listAll;
-    static ArrayList<Integer> list1;
-    static ArrayList<Integer> list2;
-    static ArrayList<Integer> list3;
-    static ArrayList<Integer> list4;
-    static ArrayList<Integer> list5;
-    static ArrayList<Integer> list6;
-    static ArrayList<Integer> list7;
+    static ArrayList<Integer> listAll, list1, list2, list3, list4, list5, list6, list7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
         getSupportActionBar().hide(); // hide the title bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
         setContentView(R.layout.activity_round60);
 
         mappingElement();
 
         setOnClick();
-    }
-
-    public void test() {
-        final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-        executorService.scheduleAtFixedRate(Round60Activity::randomNumber, 0, 1, TimeUnit.SECONDS);
     }
 
     private void mappingElement() {
@@ -96,7 +75,6 @@ public class Round60Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (count < 60) {
-//                    test();
                     randomNumber();
                     count = count + 1;
                 } else {
@@ -130,7 +108,7 @@ public class Round60Activity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public static void randomNumber() {
+    public void randomNumber() {
 
         int min = 1;
         int max = 60;
@@ -142,7 +120,12 @@ public class Round60Activity extends AppCompatActivity {
 
         txtRandomNumber.setText(value + "");
 
-        play_song(audioURL);
+        try {
+            JSONObject obj = new JSONObject(Objects.requireNonNull(loadJSONFromAsset(this)));
+            play_song(randomLinkAudio(obj.getJSONArray(String.valueOf(value))));
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         if (1 <= value && value <= 9) {
             list1.add(value);
@@ -180,7 +163,7 @@ public class Round60Activity extends AppCompatActivity {
     public static void play_song(String url) {
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
-            //mediaPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/loto2023.appspot.com/o/number1.mp3?alt=media&token=d3ce2cfa-7cb8-410e-84e6-7fc00526f19f");
+//            mediaPlayer.setDataSource("https://firebasestorage.googleapis.com/v0/b/loto2023.appspot.com/o/number1.mp3?alt=media&token=d3ce2cfa-7cb8-410e-84e6-7fc00526f19f");
             mediaPlayer.setDataSource(url);
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
